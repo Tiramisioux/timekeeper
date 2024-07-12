@@ -44,7 +44,7 @@ class TimeKeeper:
         self.error_threshold = 0.000001  # Error threshold for switching
         self.learning_rate = 0.01  # Initial learning rate
         self.bias_correction = 0  # Bias correction term
-        self.offset = 0.000209999999995  # Initial offset for HQ camera
+        self.offset = 0.002  # Initial offset for HQ camera
 
         # Performance tracking
         self.performance = {value: deque(maxlen=50) for value in self.frame_duration_values}
