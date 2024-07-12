@@ -37,14 +37,14 @@ class TimeKeeper:
         self.recording = True  # Recording state
         self.frame_durations = deque(maxlen=self.window_size)  # Use deque for fixed window size
 
-        self.frame_duration_values = [40040.000, 40043.000] #[39999.000, 40009.000]
+        self.frame_duration_values = [40040.000, 40043.000]
         self.frame_duration_index = 0  # Initial frame duration index
         self.frame_duration = self.frame_duration_values[self.frame_duration_index]  # Initial frame duration in microseconds
         self.accumulated_error = 0  # Accumulated error for control
         self.error_threshold = 0.000001  # Error threshold for switching
         self.learning_rate = 0.01  # Initial learning rate
         self.bias_correction = 0  # Bias correction term
-        self.offset = 0 # 0.0000074634 #-0.0048999999999981714  # Initial offset
+        self.offset = 0  # Initial offset
 
         # Performance tracking
         self.performance = {value: deque(maxlen=50) for value in self.frame_duration_values}
@@ -72,7 +72,7 @@ class TimeKeeper:
         fps = self.redis_controller.get_value('fps')
         if fps is not None:
             logger.info(f"Initial FPS retrieved from Redis: {fps}")
-            return 25.000
+            return fps
         logger.info("No initial FPS found in Redis, using default value.")
         return self.target_framerate
 
