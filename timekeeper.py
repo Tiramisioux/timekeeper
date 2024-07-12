@@ -37,14 +37,14 @@ class TimeKeeper:
         self.recording = True  # Recording state
         self.frame_durations = deque(maxlen=self.window_size)  # Use deque for fixed window size
 
-        self.frame_duration_values = [40040.000, 40043.000]
+        self.frame_duration_values = [39999.000, 40009.000]  #Use 40040 ms and 40043 ms for imx283
         self.frame_duration_index = 0  # Initial frame duration index
         self.frame_duration = self.frame_duration_values[self.frame_duration_index]  # Initial frame duration in microseconds
         self.accumulated_error = 0  # Accumulated error for control
         self.error_threshold = 0.000001  # Error threshold for switching
         self.learning_rate = 0.01  # Initial learning rate
         self.bias_correction = 0  # Bias correction term
-        self.offset = 0  # Initial offset
+        self.offset = 0.000209999999995  # Initial offset for HQ camera
 
         # Performance tracking
         self.performance = {value: deque(maxlen=50) for value in self.frame_duration_values}
@@ -53,7 +53,7 @@ class TimeKeeper:
         self.redis_controller.set_value('frame_duration', self.frame_duration)
         
         # Clear the log file contents initially
-        with open('/home/pi/cinemate/src/logs/system.log', 'w') as log_file:
+        with open('/home/pi/timekeeper/logs/timekeeper.log', 'w') as log_file:
             log_file.write("")
 
         self.listener_thread = threading.Thread(target=self.listen)
@@ -107,7 +107,7 @@ class TimeKeeper:
                                     sys.stdout.flush()
 
                             # Write directly to the file without logger formatting
-                            with open('/home/pi/cinemate/src/logs/system.log', 'w') as log_file:
+                            with open('/home/pi/timekeeper/logs/timekeeper.log', 'w') as log_file:
                                 log_file.write(f"Average frame rate (last {self.window_size} frames): {avg_framerate:.10f} fps\n")
 
                     except json.JSONDecodeError as e:
